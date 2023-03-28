@@ -8,7 +8,7 @@ This bot differs from my other repository, Alpaca-Discord (see: https://github.c
 The primary difference is that it offers character role playing and chat history. You can set the chat history to anything you like with !limit, but the LLAMA models can only handle 2,000 tokens of input for any given prompt, so be sure to set it low if you have a large character card.
 
 This bot utilizes a json file some may know as a character card, to place into it's preprompt information about the character it is to role play as.
-You can manually edit the json or use a tool like https://zoltanai.github.io/character-editor/ to make you a character card.
+You can manually edit the json or use a tool like https://zoltanai.github.io/character-editor/ to make yourself a character card.
 For now, we only support one character at a time, and the active character card file should be character.json
 
 I am definitely open to Pull Requests and other contributions if anyone who likes the bot wants to collaborate on adding new features, making it more robust, etc.
