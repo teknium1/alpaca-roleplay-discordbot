@@ -3,7 +3,6 @@ A Roleplaying Discord Bot for the Alpaca & Llama Based LLMs
 
 ## Overview
 Alpaca Roleplay Discordbot is a software project for running the Alpaca (or LLaMa) Large Language Model as a roleplaying discord bot. The bot is designed to run locally on a PC with as little as 8GB of VRAM. The bot listens for messages mentioning its username, replying to it's messages, or any DM's it receives, processes the message content, and generates a response based on the input.
-Added support for simply DM'ing the bot for private conversations. Simply message and it will respond.
 
 This bot differs from my other repository, Alpaca-Discord (see: https://github.com/teknium1/alpaca-discord) in a couple of ways.
 The primary difference is that it offers character role playing and chat history. You can set the chat history to anything you like with !limit, but the LLAMA models can only handle 2,000 tokens of input for any given prompt, so be sure to set it low if you have a large character card.
