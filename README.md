@@ -19,6 +19,7 @@ Example:
 
 ## Dependencies
 You must have either the LLaMa or Alpaca model (or theoretically any other fine tuned LLaMa based model) in HuggingFace format.
+Currently I can only recommend the Alpaca 7B model discussed in the gist below, with regular Llama, the preprompt would likely need to be reconfigured.
 Please see this github gist page on pre-requisites and other information to get and use Alpaca: https://gist.github.com/teknium1/c022705857ba943fb2b7e4470d8677fb
 
 To run the bot, you need the following Python packages:
