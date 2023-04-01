@@ -98,13 +98,18 @@ async def background_task():
         text = generate_prompt(message_content, past_content, past_messages)
         response = await loop.run_in_executor(executor, sync_task, text)
         print(f"Response: {text}\n{response}")
-        await msg.reply(response, mention_author=False)
+
+        try:
+            await msg.reply(response, mention_author=False)
+        except discord.errors.Forbidden:
+            print("Error: Missing Permissions")
+            await msg.channel.send("Retry")
 
 def sync_task(message):
     global chatbot
     input_ids = chatbot.tokenizer(message, return_tensors="pt").input_ids.to("cuda")
-    generated_ids = chatbot.model.generate(input_ids, max_new_tokens=250, do_sample=True, repetition_penalty=1.3, temperature=0.35, top_p=0.75, top_k=40)
-    response = chatbot.tokenizer.decode(generated_ids[0][input_ids.shape[-1]:])
+    generated_ids = chatbot.model.generate(input_ids, max_new_tokens=250, do_sample=True, repetition_penalty=1.2, temperature=0.35, top_p=0.75, top_k=40)
+    response = chatbot.tokenizer.decode(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
     return response
 
 def generate_prompt(text, pastMessage, past_messages, character_json_path="character.json"):
@@ -135,7 +140,7 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path="chara
 
     if pastMessage:
         return f"""### Instruction:
-You are tasked to role play a character that is described in the following lines. You always stay in character.
+Role play as a character that is described in the following lines. You always stay in character.
 {"Your name is " + name + "." if name else ""}
 {"Your backstory and history are: " + background if background else ""}
 {"Your personality is: " + personality if personality else ""}
@@ -146,13 +151,15 @@ Remember, you always stay on character. You are the character described above.
 This is your recent chat history:
 {past_dialogue_formatted}
 {chat_history if chat_history else "Chatbot: Hello!"}
-
 The message you sent that someone is replying to: {pastMessage}
-Current message to respond to: {text}
+
+Current message to respond to: 
+### Input:
+{text}
 ### Response:"""
     else:
         return f"""### Instruction:
-You are tasked to role play a character that is described in the following lines. You always stay in character.
+Role play as character that is described in the following lines. You always stay in character.
 {"Your name is " + name + "." if name else ""}
 {"Your backstory and history are: " + background if background else ""}
 {"Your personality is: " + personality if personality else ""}
@@ -164,12 +171,13 @@ This is your recent chat history:
 {past_dialogue_formatted}
 {chat_history if chat_history else "Chatbot: Hello!"}
 
-You just received this message to respond to: {text}
-
+Respond to this message as your character would:
+### Input:
+{text}
 ### Response:"""
 
-# Load the API key from key.txt
-with open("key.txt", "r") as f:
+# Load the API key from isolatedvoyager.txt
+with open("alpaca.txt", "r") as f:
     key = f.read()
 
 bot.run(key)
