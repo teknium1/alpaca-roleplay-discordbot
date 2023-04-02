@@ -8,7 +8,7 @@ intents.members = True
 
 class Chatbot:
     def __init__(self):
-        self.message_history_limit = 15
+        self.message_history_limit = 10
         self.tokenizer = LlamaTokenizer.from_pretrained("./alpaca/")
         self.model = LlamaForCausalLM.from_pretrained(
             "alpaca",
@@ -91,10 +91,11 @@ async def background_task():
         msg_pair: tuple[discord.Message, discord.Message, list] = await queue.get()
         msg, past, past_messages = msg_pair
 
-        message_content = replace_mentions_with_usernames(msg.content, msg)
+        message_content = msg.author.display_name + ": " + replace_mentions_with_usernames(msg.content, msg)
         past_content = None
         if past:
-            past_content = replace_mentions_with_usernames(past.content, past)
+            past_user = past.author.display_name
+            past_content = past_user + ": " + replace_mentions_with_usernames(past.content, past)
         text = generate_prompt(message_content, past_content, past_messages)
         response = await loop.run_in_executor(executor, sync_task, text)
         print(f"Response: {text}\n{response}")
@@ -108,7 +109,7 @@ async def background_task():
 def sync_task(message):
     global chatbot
     input_ids = chatbot.tokenizer(message, return_tensors="pt").input_ids.to("cuda")
-    generated_ids = chatbot.model.generate(input_ids, max_new_tokens=250, do_sample=True, repetition_penalty=1.2, temperature=0.35, top_p=0.75, top_k=40)
+    generated_ids = chatbot.model.generate(input_ids, max_new_tokens=350, do_sample=True, repetition_penalty=1.4, temperature=0.35, top_p=0.75, top_k=40)
     response = chatbot.tokenizer.decode(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
     return response
 
@@ -127,8 +128,7 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path="chara
     circumstances = character_data.get('world_scenario', '')
     common_greeting = character_data.get('first_mes', '')
     past_dialogue = character_data.get('mes_example', '')
-    past_dialogue2 = past_dialogue.split(',')
-    past_dialogue_formatted = "\n".join(past_dialogue2)
+    past_dialogue_formatted = past_dialogue
 
     for username, message in past_messages:
         message_text = f"{username}: {message}\n"
@@ -147,16 +147,15 @@ Role play as a character that is described in the following lines. You always st
 {"Your current circumstances and situation are: " + circumstances if circumstances else ""}
 {"Your common greetings are: " + common_greeting if common_greeting else ""}
 Remember, you always stay on character. You are the character described above.
-
-This is your recent chat history:
 {past_dialogue_formatted}
 {chat_history if chat_history else "Chatbot: Hello!"}
-The message you sent that someone is replying to: {pastMessage}
 
-Current message to respond to: 
+{pastMessage}
+Respond to the following message as your character would: 
 ### Input:
 {text}
-### Response:"""
+### Response:
+{name}:"""
     else:
         return f"""### Instruction:
 Role play as character that is described in the following lines. You always stay in character.
@@ -166,15 +165,16 @@ Role play as character that is described in the following lines. You always stay
 {"Your current circumstances and situation are: " + circumstances if circumstances else ""}
 {"Your common greetings are: " + common_greeting if common_greeting else ""}
 Remember, you always stay on character. You are the character described above.
-
-This is your recent chat history:
 {past_dialogue_formatted}
 {chat_history if chat_history else "Chatbot: Hello!"}
+
+Always speak with new and unique messages that haven't been said in the chat history.
 
 Respond to this message as your character would:
 ### Input:
 {text}
-### Response:"""
+### Response:
+{name}:"""
 
 # Load the API key from isolatedvoyager.txt
 with open("alpaca.txt", "r") as f:
