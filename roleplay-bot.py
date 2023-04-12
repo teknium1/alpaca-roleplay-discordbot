@@ -122,7 +122,7 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path="chara
     with open(character_json_path, 'r') as f:
         character_data = json.load(f)
 
-    name = character_data.get('char_name', '')
+    name = character_data.get('name', '')
     background = character_data.get('description', '')
     personality = character_data.get('personality', '')
     circumstances = character_data.get('world_scenario', '')
