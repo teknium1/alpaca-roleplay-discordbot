@@ -6,7 +6,9 @@ Alpaca Roleplay Discordbot is a software project for running the Alpaca (or LLaM
 
 REQUIRED: NVIDIA GPU with at least 12GB of VRAM for 7B model, and 24GB of VRAM for 13B models
 
-I'm now recommending the use of 13B gpt4-x-alpaca+GPT4-RoleplayInstructLORA model for this, which you can find here: https://huggingface.co/teknium/Base-GPT4-x-Alpaca-Roleplay-Lora . It will require 24gb of vram, and will require running it in 8bit mode, see the gist guide under Dependencies section to set that up. 
+I'm now recommending the use of 13B gpt4-x-alpaca+GPT4-RoleplayInstructLORA model for this, which you can find here: https://huggingface.co/teknium/Base-GPT4-x-Alpaca-Roleplay-Lora . It will require 24gb of vram, and will require running it in 8bit mode, see the gist guide under Dependencies section to set that up.  
+Good alternatives are GPT4-x-Alpaca: https://chavinlo/gpt4-x-alpaca
+and Alpaca-Native Finetune on 7B model, requiring only 12GB vram: https://huggingface.co/chavinlo/alpaca-native
 
 This bot differs from my other repository, Alpaca-Discord (see: https://github.com/teknium1/alpaca-discord) in a couple of ways.
 The primary difference is that it offers character role playing and chat history. You can set the chat history to anything you like with !limit, but the LLAMA models can only handle 2,000 tokens of input for any given prompt, so be sure to set it low if you have a large character card.
