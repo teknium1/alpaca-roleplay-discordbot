@@ -8,7 +8,7 @@ intents.members = True
 
 class Chatbot:
     def __init__(self):
-        self.message_history_limit = 10
+        self.message_history_limit = 5
         self.tokenizer = LlamaTokenizer.from_pretrained("./alpaca/")
         self.model = LlamaForCausalLM.from_pretrained(
             "alpaca",
@@ -176,8 +176,8 @@ Respond to this message as your character would:
 ### Response:
 {name}:"""
 
-# Load the API key from isolatedvoyager.txt
-with open("alpaca.txt", "r") as f:
+# Load the API key
+with open("key.txt", "r") as f:
     key = f.read()
 
 bot.run(key)
