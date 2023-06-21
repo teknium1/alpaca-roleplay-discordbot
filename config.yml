@@ -1,4 +1,5 @@
 discord: PUTYOURDISCORDBOTKEYHERE
+character: character.json
 
 embeddings:
   model: hkunlp/instructor-xl
