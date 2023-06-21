@@ -20,14 +20,16 @@ class Chatbot:
     def __init__(self):
         self.message_history_limit = 5
         self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name_or_path=model_config.pop("model"),
-            local_files_only=local_files_only
+            model_name_or_path=model_config.pop("model_type")
         )
         self.model = AutoModelForCausalLM.from_pretrained(
-            model_name_or_path=model_config.pop("model"),
+            model_name_or_path=model_config.pop("model_file"),
+            model_type=model_config.pop("model_type"),
             device_map="auto",
-            local_files_only=local_files_only
+            local_files_only=local_files_only,
+            config=model_config.pop("config")
         )
+
 
 chatbot = Chatbot()
 queue = asyncio.Queue()
