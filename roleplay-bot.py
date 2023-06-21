@@ -1,7 +1,7 @@
 import re, discord, torch, asyncio, json
 from concurrent.futures import ThreadPoolExecutor
 from discord.ext import commands
-from transformers import LlamaTokenizer, LlamaForCausalLM
+from ctransformers import AutoTokenizer, AutoModelForCausalLM
 
 intents = discord.Intents.default()
 intents.members = True
@@ -9,8 +9,8 @@ intents.members = True
 class Chatbot:
     def __init__(self):
         self.message_history_limit = 5
-        self.tokenizer = LlamaTokenizer.from_pretrained("./alpaca/")
-        self.model = LlamaForCausalLM.from_pretrained(
+        self.tokenizer = AutoTokenizer.from_pretrained("./alpaca/")
+        self.model = AutoModelForCausalLM.from_pretrained(
             "alpaca",
             load_in_8bit=True,
             torch_dtype=torch.float16,
