@@ -1,20 +1,32 @@
-import re, discord, torch, asyncio, json
+import re, discord, torch, asyncio, json, yaml
 from concurrent.futures import ThreadPoolExecutor
 from discord.ext import commands
 from ctransformers import AutoTokenizer, AutoModelForCausalLM
+from pathlib import Path
+from typing import Any, Dict, Optional, Union
+
 
 intents = discord.Intents.default()
 intents.members = True
 
+# Load the configuration
+with open("config.yml", "r") as f:
+    config = yaml.safe_load(f)
+
+model_config_name = config.pop("llm")
+model_config = {**config[model_config_name]}
+
 class Chatbot:
     def __init__(self):
         self.message_history_limit = 5
-        self.tokenizer = AutoTokenizer.from_pretrained("./alpaca/")
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name_or_path=model_config.pop("model"),
+            local_files_only=local_files_only
+        )
         self.model = AutoModelForCausalLM.from_pretrained(
-            "alpaca",
-            load_in_8bit=True,
-            torch_dtype=torch.float16,
-            device_map="auto"
+            model_name_or_path=model_config.pop("model"),
+            device_map="auto",
+            local_files_only=local_files_only
         )
 
 chatbot = Chatbot()
