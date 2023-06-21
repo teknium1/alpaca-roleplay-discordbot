@@ -190,8 +190,7 @@ Respond to this message as your character would:
 ### Response:
 {name}:"""
 
-# Load the API key
-with open("key.txt", "r") as f:
-    key = f.read()
+# Get the Discord API key
+key = config.pop("discord")
 
 bot.run(key)
