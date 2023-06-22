@@ -22,8 +22,6 @@ class Chatbot:
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name_or_path=model_config.pop("model_file"),
             model_type=model_config.pop("model_type"),
-            device_map="auto",
-            local_files_only=local_files_only,
             config=model_config.pop("config")
         )
 
