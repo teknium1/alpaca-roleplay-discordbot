@@ -20,9 +20,10 @@ class Chatbot:
     def __init__(self):
         self.message_history_limit = 5
         self.model = AutoModelForCausalLM.from_pretrained(
-            model_name_or_path=model_config.pop("model_file"),
+            model_path_or_repo_id=model_config.pop("model_path"),
+            model_file=model_config.pop("model_file"),
             model_type=model_config.pop("model_type"),
-            config=model_config.pop("config")
+            local_files_only=True
         )
 
 
