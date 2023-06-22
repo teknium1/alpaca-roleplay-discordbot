@@ -14,7 +14,7 @@ The primary difference is that it offers character role playing and chat history
 
 This bot utilizes a json file some may know as a character card, to place into its preprompt, information about the character it is to role play as.
 You can manually edit the json or use a tool like [Teknium's Character Creator](https://teknium1.github.io/charactercreator/index.html) or [AI Character Editor](https://zoltanai.github.io/character-editor/) to make yourself a character card.
-For now, we only support one character at a time, and the active character card file should be specified in `config.yml`.
+For now, we only support one character at a time, and the active character card file should be specified in `config.yml`.  The default character is ChatBot from `character.json`.
 
 Finally, this bot now [supports a range of quantized GGML models](https://github.com/marella/ctransformers#supported-models) beyond LLaMA-based models to run on CPU and GPU. Currently only LLaMA models have GPU support.
 
@@ -26,7 +26,7 @@ Example:
 
 ## Dependencies
 You must have either the Hermes model (or theoretically any fine tuned supported model) in GGML format.
-Currently I can only recommend Hermes or other models that support Alpaca style prompts, with models that don't support Alpaca prompts, the preprompt would likely need to be reconfigured.
+Currently I can only recommend Hermes or other LLaMA models that support Alpaca style prompts, with models that don't support Alpaca prompts, the preprompt would likely need to be reconfigured.
 
 To run the bot, you need the following Python packages:
 - `discord`
@@ -81,7 +81,7 @@ The bot uses the `discord.py` library for interacting with Discord's API and the
 
 ## How to run the bot
 1. Ensure you have the required dependencies installed.
-2. Create a Discord bot account and obtain its API key. Edit the `discord` entry in `config.yml`.
+2. [Create a Discord bot account](https://discordpy.readthedocs.io/en/stable/discord.html) and obtain its Token. Put your Token in the `discord` entry in `config.yml`.
 3. Make sure the model is stored in the current directory - it should be GGML format.
 4. Run the script using Python:
 `python roleplay-bot.py` or `py roleplay-bot.py`
