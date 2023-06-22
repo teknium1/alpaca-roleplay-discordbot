@@ -8,7 +8,8 @@ llm: hermes-ggml-4bit
 
 hermes-ggml-4bit:
   model: TheBloke/Nous-Hermes-13B-GGML
-  model_file: nous-hermes-13b.ggmlv3.q4-0.bin
+  model_path: D:\Models\
+  model_file: nous-hermes-13b.ggmlv3.q4_0.bin
   model_type: llama
   config:
     context_length: 2048

@@ -83,7 +83,7 @@ The bot uses the `discord.py` library for interacting with Discord's API and the
 1. Ensure you have the required dependencies installed.
 2. Copy `config.yml.example` to `config.yml`.
 3. [Create a Discord bot account](https://discordpy.readthedocs.io/en/stable/discord.html) and obtain its Token. Put your Token in the `discord` entry in `config.yml`.
-4. Make sure the model is stored in the current directory - it should be GGML format.
+4. Make sure the model is stored in the directory specified by the relevant `model_path` entry in `config.yml` - it should be GGML format.
 5. Run the script using Python:
 `python roleplay-bot.py` or `py roleplay-bot.py`
 6. Invite the bot to your Discord server by generating a URL in the discord developer portal.
