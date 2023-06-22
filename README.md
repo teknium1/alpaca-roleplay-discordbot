@@ -32,7 +32,7 @@ To run the bot, you need the following Python packages:
 - `discord`
 - `ctransformers`
 
-You can install discord and ctransformers using pip:
+For CPU only inference, you can install discord and ctransformers using pip:
 
 ```sh
 pip install discord
@@ -42,6 +42,7 @@ pip install ctransformers
 For GPU (CUDA) support, set environment variable `CT_CUBLAS=1` and install from source using:
 
 ```sh
+pip install discord
 CT_CUBLAS=1 pip install ctransformers --no-binary ctransformers
 ```
 
@@ -51,15 +52,17 @@ CT_CUBLAS=1 pip install ctransformers --no-binary ctransformers
 On Windows PowerShell run:
 
 ```sh
+py -m pip install discord
 $env:CT_CUBLAS=1
-pip install ctransformers --no-binary ctransformers
+py -m pip install ctransformers --no-binary ctransformers
 ```
 
 On Windows Command Prompt run:
 
 ```sh
+py -m pip install discord
 set CT_CUBLAS=1
-pip install ctransformers --no-binary ctransformers
+py -m pip install ctransformers --no-binary ctransformers
 ```
 
 </details>
