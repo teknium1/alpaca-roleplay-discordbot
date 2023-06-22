@@ -1,4 +1,4 @@
-import re, discord, torch, asyncio, json, yaml
+import re, discord, asyncio, json, yaml
 from concurrent.futures import ThreadPoolExecutor
 from discord.ext import commands
 from ctransformers import AutoTokenizer, AutoModelForCausalLM

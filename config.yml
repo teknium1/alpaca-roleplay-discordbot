@@ -4,11 +4,11 @@ character: character.json
 embeddings:
   model: hkunlp/instructor-xl
 
-llm: hermes-ggml
+llm: hermes-ggml-4bit
 
-hermes-ggml:
+hermes-ggml-4bit:
   model: TheBloke/Nous-Hermes-13B-GGML
-  model_file: nous-hermes-13b.ggmlv3.q3_K_S.bin
+  model_file: nous-hermes-13b.ggmlv3.q4-0.bin
   model_type: llama
   config:
     context_length: 2048
