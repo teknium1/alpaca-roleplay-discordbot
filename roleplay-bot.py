@@ -1,7 +1,7 @@
 import re, discord, asyncio, json, yaml
 from concurrent.futures import ThreadPoolExecutor
 from discord.ext import commands
-from ctransformers import AutoTokenizer, AutoModelForCausalLM
+from ctransformers import AutoModelForCausalLM
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
@@ -19,9 +19,6 @@ model_config = {**config[model_config_name]}
 class Chatbot:
     def __init__(self):
         self.message_history_limit = 5
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            model_name_or_path=model_config.pop("model_type")
-        )
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name_or_path=model_config.pop("model_file"),
             model_type=model_config.pop("model_type"),
@@ -122,9 +119,9 @@ async def background_task():
 
 def sync_task(message):
     global chatbot
-    input_ids = chatbot.tokenizer(message, return_tensors="pt").input_ids.to("cuda")
+    input_ids = chatbot.tokenize(message, return_tensors="pt").input_ids.to("cuda")
     generated_ids = chatbot.model.generate(input_ids, max_new_tokens=350, do_sample=True, repetition_penalty=1.4, temperature=0.35, top_p=0.75, top_k=40)
-    response = chatbot.tokenizer.decode(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
+    response = chatbot.tokenize.decode(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
     return response
 
 def generate_prompt(text, pastMessage, past_messages, character_json_path="character.json"):
@@ -146,7 +143,7 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path="chara
 
     for username, message in past_messages:
         message_text = f"{username}: {message}\n"
-        message_tokens = len(chatbot.tokenizer.encode(message_text))
+        message_tokens = len(chatbot.tokenize.encode(message_text))
         if token_count + message_tokens > max_token_limit:
             break
         chat_history = message_text + chat_history
