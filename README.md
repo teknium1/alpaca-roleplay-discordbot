@@ -93,7 +93,6 @@ The bot uses the `discord.py` library for interacting with Discord's API and the
 ## Customization options
 You can customize parameters in the script to change the behavior of the bot:
 
-- `max_new_tokens`: Set the maximum number of new tokens the model should generate in its response.
 - `repetition_penalty`: Set a penalty value for repeating tokens. Default is `1.1`.
 - `temperature`: Set the sampling temperature. Default is `0.8`.
 - `top_p`: Set the cumulative probability threshold for nucleus sampling. Default is `0.95`.
