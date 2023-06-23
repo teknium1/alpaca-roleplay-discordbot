@@ -30,6 +30,7 @@ class Chatbot:
 chatbot = Chatbot()
 queue = asyncio.Queue()
 bot = commands.Bot(command_prefix='!', intents=intents)
+character = config.pop("character")
 
 def replace_mentions_with_usernames(content, message):
     for mention in re.finditer(r'<@!?(\d+)>', content):
@@ -123,7 +124,7 @@ def sync_task(message):
     response = chatbot.tokenize.decode(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
     return response
 
-def generate_prompt(text, pastMessage, past_messages, character_json_path="character.json"):
+def generate_prompt(text, pastMessage, past_messages, character_json_path=character):
     global chatbot
     max_token_limit = 2000
     chat_history = ""
