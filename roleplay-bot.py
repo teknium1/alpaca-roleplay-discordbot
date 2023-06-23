@@ -120,7 +120,7 @@ async def background_task():
 def sync_task(message):
     global chatbot
     input_ids = chatbot.model.tokenize(message)
-    generated_ids = chatbot.model.generate(input_ids, repetition_penalty=1.1, temperature=0.8, top_p=0.95, top_k=40)
+    generated_ids = chatbot.model.generate(input_ids, repetition_penalty=1.1, temperature=0.28, top_p=0.95, top_k=40)
     response = chatbot.model.detokenize(generated_ids).replace("</s>", "")
     return response
 
