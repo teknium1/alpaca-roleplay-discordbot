@@ -143,7 +143,7 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path=charac
 
     for username, message in past_messages:
         message_text = f"{username}: {message}\n"
-        message_tokens = len(chatbot.tokenize.encode(message_text))
+        message_tokens = len(chatbot.model.tokenize.encode(message_text))
         if token_count + message_tokens > max_token_limit:
             break
         chat_history = message_text + chat_history
