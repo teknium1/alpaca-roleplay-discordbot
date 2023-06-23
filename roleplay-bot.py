@@ -120,7 +120,7 @@ async def background_task():
 def sync_task(message):
     global chatbot
     input_ids = chatbot.tokenize(message, return_tensors="pt").input_ids.to("cuda")
-    generated_ids = chatbot.model.generate(input_ids, max_new_tokens=350, do_sample=True, repetition_penalty=1.4, temperature=0.35, top_p=0.75, top_k=40)
+    generated_ids = chatbot.model.generate(input_ids, max_new_tokens=350, do_sample=True, repetition_penalty=1.1, temperature=0.8, top_p=0.95, top_k=40)
     response = chatbot.tokenize.decode(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
     return response
 

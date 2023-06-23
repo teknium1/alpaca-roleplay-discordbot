@@ -100,7 +100,7 @@ You can customize parameters in the script to change the behavior of the bot:
 - `top_k`: Set the number of tokens to consider for top-k sampling. Default is `40`.
 - `message_history_limit`: set this to the default number of previous chat messages for the bot to look at each response it makes.
 
-More parameters are detailed in the [C Transformers documentation](https://github.com/marella/ctransformers#config)
+More information about parameters are detailed in the [C Transformers documentation](https://github.com/marella/ctransformers#config)
 
 ## Credits, License, Etc.
 While my repo may be licensed as MIT, the underlying code, libraries, and other portions of this repo may not be. Please DYOR to check what can
