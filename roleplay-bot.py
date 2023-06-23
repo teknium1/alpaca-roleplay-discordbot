@@ -121,7 +121,7 @@ def sync_task(message):
     global chatbot
     input_ids = chatbot.model.tokenize(message, return_tensors="pt").input_ids.to("cuda")
     generated_ids = chatbot.model.generate(input_ids, max_new_tokens=350, do_sample=True, repetition_penalty=1.1, temperature=0.8, top_p=0.95, top_k=40)
-    response = chatbot.model.tokenize.decode(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
+    response = chatbot.model.detokenize(generated_ids[0][input_ids.shape[-1]:]).replace("</s>", "")
     return response
 
 def generate_prompt(text, pastMessage, past_messages, character_json_path=character):
@@ -143,7 +143,7 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path=charac
 
     for username, message in past_messages:
         message_text = f"{username}: {message}\n"
-        message_tokens = len(chatbot.model.tokenize.encode(message_text))
+        message_tokens = len(chatbot.model.tokenize(message_text))
         if token_count + message_tokens > max_token_limit:
             break
         chat_history = message_text + chat_history
