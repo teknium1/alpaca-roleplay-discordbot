@@ -110,6 +110,9 @@ async def background_task():
         text = generate_prompt(message_content, past_content, past_messages)
         response = await loop.run_in_executor(executor, sync_task, text)
         print(f"Response: {text}\n{response}")
+        
+        if not response.strip():
+            response = "Sorry, I didn't understand that.  Could you please clarify your statement."
 
         try:
             await msg.reply(response, mention_author=False)
