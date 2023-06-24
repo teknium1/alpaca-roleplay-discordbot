@@ -3,3 +3,5 @@
 config.yml
 nous-hermes-13b.ggmlv3.q4_0.bin
 professornebula.json
+dreambot.json
+simple-roleplay-bot.py
