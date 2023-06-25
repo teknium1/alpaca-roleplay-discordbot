@@ -11,8 +11,9 @@ hermes-ggml-4bit:
   model_path: D:\Models\
   model_file: nous-hermes-13b.ggmlv3.q4_0.bin
   model_type: llama
-  config:
-    context_length: 2048
+  gpu_layers: 30
+  threads: 1
+  context_length: 2048
 
 ctransformers:
   model: TheBloke/Wizard-Vicuna-7B-Uncensored-GGML

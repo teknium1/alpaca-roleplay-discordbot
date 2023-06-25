@@ -39,7 +39,7 @@ pip install discord
 pip install ctransformers
 ```
 
-For GPU (CUDA) support, set environment variable `CT_CUBLAS=1` and install from source using:
+For GPU (CUDA) support, you will need to install the [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads), then set environment variable `CT_CUBLAS=1` and install from source using:
 
 ```sh
 pip install discord

@@ -25,6 +25,7 @@ class Chatbot:
             model_type=model_config.pop("model_type"),
             context_length=model_config.pop("context_length"),
             gpu_layers=model_config.pop("gpu_layers"),
+            threads=model_config.pop("threads"),
             local_files_only=True
         )
 
