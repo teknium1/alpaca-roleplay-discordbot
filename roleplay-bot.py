@@ -23,6 +23,8 @@ class Chatbot:
             model_path_or_repo_id=model_config.pop("model_path"),
             model_file=model_config.pop("model_file"),
             model_type=model_config.pop("model_type"),
+            context_length=model_config.pop("context_length"),
+            gpu_layers=model_config.pop("gpu_layers"),
             local_files_only=True
         )
 
