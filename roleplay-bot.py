@@ -171,9 +171,9 @@ Role play as a character that is described in the following lines. You always st
 {"Your personality is: " + personality if personality else ""}
 {"Your current circumstances and situation are: " + circumstances if circumstances else ""}
 {"Your common greetings are: " + common_greeting if common_greeting else ""}
+{"You say things like this when appropriate: " + past_dialogue_formatted}
 Remember, you always stay on character. You are the character described above.
-{past_dialogue_formatted}
-{chat_history if chat_history else "Chatbot: Hello!"}
+{chat_history if chat_history else name + ": " + common_greeting }
 
 {pastMessage}
 Respond to the following message as your character would: 
@@ -189,9 +189,9 @@ Role play as character that is described in the following lines. You always stay
 {"Your personality is: " + personality if personality else ""}
 {"Your current circumstances and situation are: " + circumstances if circumstances else ""}
 {"Your common greetings are: " + common_greeting if common_greeting else ""}
+{"You say things like this when appropriate: " + past_dialogue_formatted}
 Remember, you always stay on character. You are the character described above.
-{past_dialogue_formatted}
-{chat_history if chat_history else "Chatbot: Hello!"}
+{chat_history if chat_history else name + ": " + common_greeting }
 
 Always speak with new and unique messages that haven't been said in the chat history.
 
