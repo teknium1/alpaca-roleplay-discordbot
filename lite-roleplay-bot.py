@@ -155,8 +155,6 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path=charac
     personality = character_data.get('personality', '')
     circumstances = character_data.get('world_scenario', '')
     common_greeting = character_data.get('first_mes', '')
-    past_dialogue = character_data.get('mes_example', '')
-    past_dialogue_formatted = past_dialogue
 
     for username, message in past_messages:
         message_text = f"{username}: {message}\n"
