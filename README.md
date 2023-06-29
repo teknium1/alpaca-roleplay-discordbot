@@ -1,23 +1,22 @@
-# Alpaca Roleplay Discord Bot README
-A Roleplaying Discord Bot for the Alpaca & Llama Based LLMs  
-
-**New:** I created a character creator "app" webpage that lets you make characters for this bot in a form and automatically download a json to use for your character cards here: https://teknium1.github.io/charactercreator/index.html
+# GGML Roleplay Discord Bot README
+A Roleplaying Discord Bot for GGML LLMs
 
 ## Overview
-Alpaca Roleplay Discordbot is a software project for running the Alpaca (or LLaMa) Large Language Model as a roleplaying discord bot. The bot is designed to run locally on a PC with as little as 8GB of VRAM. The bot listens for messages mentioning its username, replying to it's messages, or any DM's it receives, processes the message content, and generates a response based on the input.
+GGML Roleplay Discordbot is a software project for running GGML formatted Large Language Models such as [NousResearch's Nous-Hermes-13B GGML](https://huggingface.co/TheBloke/Nous-Hermes-13B-GGML) as a roleplaying discord bot. The bot is designed to run locally on a PC with as little as 8GB of VRAM. The bot listens for messages mentioning its username, replying to its messages, or any DMs it receives, processes the message content, and generates a response based on the input.
 
-REQUIRED: NVIDIA GPU with at least 12GB of VRAM for 7B model, and 24GB of VRAM for 13B models
+PREFERRED: NVIDIA GPU with at least 12GB of VRAM for 7B model, and 24GB of VRAM for 13B models
 
-I'm now recommending the use of 13B gpt4-x-alpaca+GPT4-RoleplayInstructLORA model for this, which you can find here: https://huggingface.co/teknium/Base-GPT4-x-Alpaca-Roleplay-Lora . It will require 24gb of vram, and will require running it in 8bit mode, see the gist guide under Dependencies section to set that up.  
-Good alternatives are GPT4-x-Alpaca: https://chavinlo/gpt4-x-alpaca
-and Alpaca-Native Finetune on 7B model, requiring only 12GB vram: https://huggingface.co/chavinlo/alpaca-native
+Good alternatives are [OpenAccess AI Collective's Manticore 13B Chat GGML](https://huggingface.co/TheBloke/manticore-13b-chat-pyg-GGML)
+and [PocketDoc/Dans-PersonalityEngine-13b-ggml-q4_0](https://huggingface.co/PocketDoc/Dans-PersonalityEngine-13b-ggml-q4_0)
 
-This bot differs from my other repository, Alpaca-Discord (see: https://github.com/teknium1/alpaca-discord) in a couple of ways.
-The primary difference is that it offers character role playing and chat history. You can set the chat history to anything you like with !limit, but the LLAMA models can only handle 2,000 tokens of input for any given prompt, so be sure to set it low if you have a large character card.
+This bot differs from my other repository, [Alpaca-Discord](https://github.com/teknium1/alpaca-discord) in a few ways.
+The primary difference is that it offers character role playing and chat history. You can set the chat history to anything you like with !limit, but the LLAMA-based models can only handle 2,000 tokens of input for any given prompt, so be sure to set it low if you have a large character card.
 
-This bot utilizes a json file some may know as a character card, to place into it's preprompt information about the character it is to role play as.
-You can manually edit the json or use a tool like https://zoltanai.github.io/character-editor/ to make yourself a character card.
-For now, we only support one character at a time, and the active character card file should be character.json
+This bot utilizes a json file some may know as a character card, to place into its preprompt, information about the character it is to role play as.
+You can manually edit the json or use a tool like [Teknium's Character Creator](https://teknium1.github.io/charactercreator/index.html) or [AI Character Editor](https://zoltanai.github.io/character-editor/) to make yourself a character card.
+For now, we only support one character at a time, and the active character card file should be specified in `config.yml`.  The default character is ChatBot from `character.json`.
+
+Finally, this bot now [supports a range of quantized GGML models](https://github.com/marella/ctransformers#supported-models) beyond LLaMA-based models to run on CPU and GPU. Currently only LLaMA models have GPU support.
 
 I am definitely open to Pull Requests and other contributions if anyone who likes the bot wants to collaborate on adding new features, making it more robust, etc.
 
@@ -26,30 +25,54 @@ Example:
 
 
 ## Dependencies
-You must have either the LLaMa or Alpaca model (or theoretically any other fine tuned LLaMa based model) in HuggingFace format.
-Currently I can only recommend the Alpaca 7B model discussed in the gist below, with regular Llama, the preprompt would likely need to be reconfigured.
-Please see this github gist page on pre-requisites and other information to get and use Alpaca: https://gist.github.com/teknium1/c022705857ba943fb2b7e4470d8677fb
+You must have either the Hermes model (or theoretically any fine tuned supported model) in GGML format.
+Currently I can only recommend Hermes or other LLaMA models that support Alpaca style prompts, with models that don't support Alpaca prompts, the preprompt would likely need to be reconfigured.
 
 To run the bot, you need the following Python packages:
 - `discord`
-- `transformers`
-- `torch`
+- `ctransformers`
 
-You can install discord using pip:
+For CPU only inference, you can install discord and ctransformers using pip:
 
-`pip install discord`
+```sh
+pip install discord
+pip install ctransformers
+```
 
-Currently, Transformers module only has support for Llama through the latest github repository, and not through pip package. Install it like so:
+For GPU (CUDA) support, you will need to install the [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads), then set environment variable `CT_CUBLAS=1` and install from source using:
 
-`pip install git+https://github.com/huggingface/transformers.git`
+```sh
+pip install discord
+CT_CUBLAS=1 pip install ctransformers --no-binary ctransformers
+```
 
-For Pytorch you need to install it with cuda enabled. See here for commands specific to your environment: https://pytorch.org/get-started/locally/
+<details>
+<summary><strong>Show commands for Windows</strong></summary><br>
+
+On Windows PowerShell run:
+
+```sh
+py -m pip install discord
+$env:CT_CUBLAS=1
+py -m pip install ctransformers --no-binary ctransformers
+```
+
+On Windows Command Prompt run:
+
+```sh
+py -m pip install discord
+set CT_CUBLAS=1
+py -m pip install ctransformers --no-binary ctransformers
+```
+
+</details>
+
 
 ## How the bot works
-The bot uses the `discord.py` library for interacting with Discord's API and the `transformers` library for loading and using the Large Language Model.
+The bot uses the `discord.py` library for interacting with Discord's API and the `ctransformers` library for loading and using the Large Language Model.
 
 1. It creates a Discord client with the default intents and sets the `members` intent to `True`.
-2. It loads the Llama tokenizer and Llama model from the local `./alpaca/` directory.
+2. It loads the GGML model from the current directory.
 3. It initializes a queue to manage incoming messages mentioning the bot.
 4. It listens for messages and adds them to the queue if the bot is mentioned.
 5. If the bot is mentioned, the roleplaying character card as well as the last N messages (that you set) are sent above your prompt to the model.
@@ -58,27 +81,25 @@ The bot uses the `discord.py` library for interacting with Discord's API and the
 
 ## How to run the bot
 1. Ensure you have the required dependencies installed.
-2. Create a Discord bot account and obtain its API key. Save the key to a file named `alpacakey.txt` in the same directory as the bot's script.
-3. Make sure the Llama tokenizer and Llama model are stored in a local `./alpaca/` directory - They should be HuggingFace format.
-Your alpaca directory should have all of these files (example image is from alpaca-7b - 13B+ models will have more files):  
-![image](https://user-images.githubusercontent.com/127238744/226094774-a5371a98-947b-47a4-a4b2-f56e6331ee1e.png)  
-4. Run the script using Python:
-`python roleplay-bot.py`
-5. Invite the bot to your Discord server by generating a URL in the discord developer portal.
-6. Mention the bot in a message or dm the bot directly to receive a response generated by the Large Language Model.
+2. Copy `config.yml.example` to `config.yml`.
+3. [Create a Discord bot account](https://discordpy.readthedocs.io/en/stable/discord.html) and obtain its Token. Put your Token in the `discord` entry in `config.yml`.
+4. Enable all the Priviliged Gateway Intents in the bot account.  Ignore the Bot Permissions section.
+4. Make sure the model is stored in the directory specified by the relevant `model_path` entry in `config.yml` - it should be GGML format.
+5. Run the script using Python:
+`python roleplay-bot.py` or `py roleplay-bot.py`
+6. Invite the bot to your Discord server by generating a URL in the Discord developer portal.
+7. Mention the bot in a message or dm the bot directly to receive a response generated by the Large Language Model.
 
 ## Customization options
-You can customize the following parameters in the script to change the behavior of the bot:
+You can customize parameters in the script to change the behavior of the bot:
 
-- `load_in_8bit`: Set to `True` if you want to load the model using 8-bit precision.
-- `device_map`: Set to `"auto"` to automatically use the best available device (GPU or CPU).
-- `max_new_tokens`: Set the maximum number of new tokens the model should generate in its response.
-- `do_sample`: Set to `True` to use sampling instead of greedy decoding for generating the response.
-- `repetition_penalty`: Set a penalty value for repeating tokens. Default is `1.0`.
+- `repetition_penalty`: Set a penalty value for repeating tokens. Default is `1.1`.
 - `temperature`: Set the sampling temperature. Default is `0.8`.
-- `top_p`: Set the cumulative probability threshold for nucleus sampling. Default is `0.75`.
+- `top_p`: Set the cumulative probability threshold for nucleus sampling. Default is `0.95`.
 - `top_k`: Set the number of tokens to consider for top-k sampling. Default is `40`.
-- `message_history_limit`: set this to the default number of previous chat messages for the bot to look at each response it makes
+- `message_history_limit`: set this to the default number of previous chat messages for the bot to look at each response it makes.
+
+More information about parameters are detailed in the [C Transformers documentation](https://github.com/marella/ctransformers#config)
 
 ## Credits, License, Etc.
 While my repo may be licensed as MIT, the underlying code, libraries, and other portions of this repo may not be. Please DYOR to check what can
@@ -95,6 +116,8 @@ This would not be possible without the people of Facebook's Research Team: FAIR,
   howpublished = {\url{https://github.com/tatsu-lab/stanford_alpaca}},
 }
 </pre>
+
+@marella - https://github.com/marella - For the MIT licenced C Transformers and ChatDocs
 
 @Ristellise - https://github.com/Ristellise - For converting the code to be fully async and non-blocking
 
