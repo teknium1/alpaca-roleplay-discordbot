@@ -34,6 +34,7 @@ chatbot = Chatbot()
 queue = asyncio.Queue()
 bot = commands.Bot(command_prefix='!', intents=intents)
 character = config.pop("character")
+firstTime = True
 
 def replace_mentions_with_usernames(content, message):
     for mention in re.finditer(r'<@!?(\d+)>', content):
@@ -76,12 +77,7 @@ async def on_message(message):
     await bot.process_commands(message)
 
     if isinstance(message.channel, discord.channel.DMChannel) or (bot.user and bot.user.mentioned_in(message)):
-        if message.reference:
-            pastMessage = await message.channel.fetch_message(message.reference.message_id)
-        else:
-            pastMessage = None
-        past_messages = await fetch_past_messages(message.channel)
-        await queue.put((message, pastMessage, past_messages))
+        await queue.put((message))
 
 async def fetch_past_messages(channel):
     global chatbot
@@ -103,14 +99,10 @@ async def background_task():
     print("Task Started. Waiting for inputs.")
     while True:
         msg_pair: tuple[discord.Message, discord.Message, list] = await queue.get()
-        msg, past, past_messages = msg_pair
+        msg = msg_pair
 
         message_content = msg.author.display_name + ": " + replace_mentions_with_usernames(msg.content, msg)
-        past_content = None
-        if past:
-            past_user = past.author.display_name
-            past_content = past_user + ": " + replace_mentions_with_usernames(past.content, past)
-        text = generate_prompt(message_content, past_content, past_messages)
+        text = generate_prompt(message_content)
         response = await loop.run_in_executor(executor, sync_task, text)
         print(f"Response: {text}\n{response}")
         
@@ -141,11 +133,9 @@ def sync_task(message):
     response = chatbot.model.detokenize(generated_tokens).replace("</s>", "")
     return response
 
-def generate_prompt(text, pastMessage, past_messages, character_json_path=character):
+def generate_prompt(text, character_json_path=character):
     global chatbot
-    max_token_limit = 2000
-    chat_history = ""
-    token_count = 0
+    global firstTime
 
     with open(character_json_path, 'r') as f:
         character_data = json.load(f)
@@ -156,22 +146,8 @@ def generate_prompt(text, pastMessage, past_messages, character_json_path=charac
     circumstances = character_data.get('world_scenario', '')
     common_greeting = character_data.get('first_mes', '')
 
-    for username, message in past_messages:
-        message_text = f"{username}: {message}\n"
-        message_tokens = len(chatbot.model.tokenize(message_text))
-        if token_count + message_tokens > max_token_limit:
-            break
-        chat_history = message_text + chat_history
-        token_count += message_tokens
-
-    if pastMessage:
-        return f"""### Instruction:
-Respond to the following message as your character would: 
-### Input:
-{text}
-### Response:
-{name}:"""
-    else:
+    if firstTime:
+        firstTime = False
         return f"""### Instruction:
 Role play as character that is described in the following lines. You always stay in character.
 {"Your name is " + name + "." if name else ""}
@@ -184,6 +160,13 @@ Remember, you always stay on character. You are the character described above.
 Always speak with new and unique messages that haven't been said in the chat history.
 
 Respond to this message as your character would:
+### Input:
+{text}
+### Response:
+{name}:"""
+    else:
+        return f"""### Instruction:
+Respond to the following message as your character would: 
 ### Input:
 {text}
 ### Response:
